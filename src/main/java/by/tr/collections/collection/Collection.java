@@ -1,4 +1,4 @@
-package by.tr.collections;
+package by.tr.collections.collection;
 
 public interface Collection<T> extends Container<T>{
     boolean add(T t);

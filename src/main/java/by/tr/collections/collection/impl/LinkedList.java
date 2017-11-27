@@ -1,9 +1,9 @@
-package by.tr.collections.impl;
+package by.tr.collections.collection.impl;
 
-import by.tr.collections.Deque;
-import by.tr.collections.Iterator;
-import by.tr.collections.List;
-import by.tr.collections.exception.InvalidIndexException;
+import by.tr.collections.collection.Deque;
+import by.tr.collections.collection.Iterator;
+import by.tr.collections.collection.List;
+import by.tr.collections.collection.exception.InvalidIndexException;
 
 import java.util.NoSuchElementException;
 
@@ -184,6 +184,7 @@ public class LinkedList<T> implements List<T>, Deque<T> {
     private class ListIterator implements Iterator<T> {
         private int index;
         private Node<T> n = first;
+        private Node<T> lastReturned;
 
 
         @Override
@@ -194,7 +195,7 @@ public class LinkedList<T> implements List<T>, Deque<T> {
         @Override
         public T next() {
             if (hasNext()) {
-                n = n.getNext();
+                lastReturned = n = n.getNext();
                 index++;
                 return n.getElem();
             }
@@ -209,12 +210,19 @@ public class LinkedList<T> implements List<T>, Deque<T> {
         @Override
         public T previous() {
             if (hasPrevious()) {
+                lastReturned = n;
                 T t = n.getElem();
                 n = n.getPrev();
                 index--;
                 return t;
             }
             throw new NoSuchElementException();
+        }
+
+        @Override
+        public void remove() {
+            unlink(lastReturned);
+            index--;
         }
     }
 

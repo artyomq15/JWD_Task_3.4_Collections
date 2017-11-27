@@ -1,4 +1,4 @@
-package by.tr.collections;
+package by.tr.collections.collection;
 
 public interface Deque<T> extends Queue<T> {
     void addFirst(T t);

@@ -1,8 +1,8 @@
-package by.tr.collections.impl;
+package by.tr.collections.collection.impl;
 
-import by.tr.collections.Iterator;
-import by.tr.collections.List;
-import by.tr.collections.exception.InvalidIndexException;
+import by.tr.collections.collection.Iterator;
+import by.tr.collections.collection.List;
+import by.tr.collections.collection.exception.InvalidIndexException;
 
 import java.io.Serializable;
 import java.util.NoSuchElementException;
@@ -94,6 +94,7 @@ public class ArrayList<T> implements List<T>, Cloneable, Serializable {
 
     private class ListIterator implements Iterator<T> {
         private int index;
+        int lastReturnedIndex;
 
         @Override
         public boolean hasNext() {
@@ -103,36 +104,47 @@ public class ArrayList<T> implements List<T>, Cloneable, Serializable {
         @Override
         public T next() {
             if (this.hasNext()) {
-                return (T)array[index++];
+                lastReturnedIndex = index;
+                return (T) array[index++];
             }
             throw new NoSuchElementException();
         }
 
         @Override
         public boolean hasPrevious() {
-            return index>0;
+            return index > 0;
         }
 
         @Override
         public T previous() {
             if (this.hasPrevious()) {
-                return (T)array[--index];
+                lastReturnedIndex = index-1;
+                return (T) array[--index];
             }
             throw new NoSuchElementException();
+        }
+
+        @Override
+        public void remove() {
+            System.out.println(lastReturnedIndex + "_" );
+
+            int numberElements = size - lastReturnedIndex - 1;
+            System.arraycopy(array, lastReturnedIndex + 1, array, lastReturnedIndex, numberElements);
+            array[--size] = null;
+            index--;
         }
     }
 
 
-
     private void checkIndex(int index) {
-        if (index > size || index<0) {
-            throw new InvalidIndexException("Index: " +index+", Size: "+size );
+        if (index > size || index < 0) {
+            throw new InvalidIndexException("Index: " + index + ", Size: " + size);
         }
     }
 
     private void checkIndexForRemoving(int index) {
         if (index >= size || size == 0) {
-            throw new InvalidIndexException("Index: " +index+", Size: "+size );
+            throw new InvalidIndexException("Index: " + index + ", Size: " + size);
         }
     }
 

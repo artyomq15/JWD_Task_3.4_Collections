@@ -1,4 +1,4 @@
-package by.tr.collections;
+package by.tr.collections.collection;
 
 public interface Queue<T> extends Collection<T> {
     boolean offer(T t);
