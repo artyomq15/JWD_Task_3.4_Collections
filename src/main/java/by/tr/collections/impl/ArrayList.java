@@ -5,6 +5,7 @@ import by.tr.collections.List;
 import by.tr.collections.exception.InvalidIndexException;
 
 import java.io.Serializable;
+import java.util.NoSuchElementException;
 
 public class ArrayList<T> implements List<T>, Cloneable, Serializable {
     private static final int DEFAULT_SIZE = 10;
@@ -29,7 +30,6 @@ public class ArrayList<T> implements List<T>, Cloneable, Serializable {
 
     @Override
     public void add(int index, T t) {
-        //
         checkIndex(index);
         ensureCapacity();
         array[size++] = t;
@@ -89,7 +89,37 @@ public class ArrayList<T> implements List<T>, Cloneable, Serializable {
 
     @Override
     public Iterator<T> getIterator() {
-        return null;
+        return new ListIterator();
+    }
+
+    private class ListIterator implements Iterator<T> {
+        private int index;
+
+        @Override
+        public boolean hasNext() {
+            return index < size;
+        }
+
+        @Override
+        public T next() {
+            if (this.hasNext()) {
+                return (T)array[index++];
+            }
+            throw new NoSuchElementException();
+        }
+
+        @Override
+        public boolean hasPrevious() {
+            return index>0;
+        }
+
+        @Override
+        public T previous() {
+            if (this.hasPrevious()) {
+                return (T)array[--index];
+            }
+            throw new NoSuchElementException();
+        }
     }
 
 

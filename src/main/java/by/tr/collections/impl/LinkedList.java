@@ -13,8 +13,9 @@ public class LinkedList<T> implements List<T>, Deque<T> {
     private int size;
 
     public LinkedList() {
-        last = new Node<>(null, first, null);
+        last = new Node<>(null, null, null);
         first = new Node<>(null, null, last);
+        last.setPrev(first);
     }
 
     @Override
@@ -177,8 +178,46 @@ public class LinkedList<T> implements List<T>, Deque<T> {
 
     @Override
     public Iterator<T> getIterator() {
-        return null;
+        return new ListIterator();
     }
+
+    private class ListIterator implements Iterator<T> {
+        private int index;
+        private Node<T> n = first;
+
+
+        @Override
+        public boolean hasNext() {
+            return index < size;
+        }
+
+        @Override
+        public T next() {
+            if (hasNext()) {
+                n = n.getNext();
+                index++;
+                return n.getElem();
+            }
+            throw new NoSuchElementException();
+        }
+
+        @Override
+        public boolean hasPrevious() {
+            return index>0;
+        }
+
+        @Override
+        public T previous() {
+            if (hasPrevious()) {
+                T t = n.getElem();
+                n = n.getPrev();
+                index--;
+                return t;
+            }
+            throw new NoSuchElementException();
+        }
+    }
+
 
     @Override
     public void add(int index, T t) {

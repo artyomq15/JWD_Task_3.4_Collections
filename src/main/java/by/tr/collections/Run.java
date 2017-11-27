@@ -4,23 +4,25 @@ import by.tr.collections.impl.*;
 import by.tr.collections.impl.ArrayList;
 import by.tr.collections.impl.LinkedList;
 
-import java.util.*;
-import java.util.List;
+
 
 
 public class Run {
     public static void main(String[] args) {
         /*List<Integer> list = new ArrayList<>();
 
-        System.out.println(list.size());
 
-        for (int i = 0; i<=20; i++){
+        for (int i = 0; i<=5; i++){
             list.add(i, i);
         }
 
-        System.out.println(list.remove(20));
-        System.out.println(list.remove(new Integer(66)));
-        System.out.println(list.size());*/
+        Iterator<Integer> it = list.getIterator();
+        while (it.hasNext()){
+            System.out.println(it.next());
+        }
+        while (it.hasPrevious()){
+            System.out.println(it.previous());
+        }*/
 
 
         Deque<String> list = new LinkedList<>();
@@ -29,7 +31,16 @@ public class Run {
         list.addLast("cheburek");
         System.out.println(list);
 
-        by.tr.collections.List<String> s = new LinkedList<>();
+        Iterator<String> iterator = list.getIterator();
+        while (iterator.hasNext()){
+            System.out.println(iterator.next());
+        }
+        while (iterator.hasPrevious()){
+            System.out.println(iterator.previous());
+        }
+
+
+        List<String> s = new LinkedList<>();
 
         s.add(0,"b");
         s.add("a");
@@ -43,6 +54,7 @@ public class Run {
         System.out.println("________");
 
         java.util.List<Integer> d = new java.util.LinkedList<>();
+
         d.add(0,5);
         d.add(0,6);
         System.out.println(d.remove(1));
