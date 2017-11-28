@@ -5,6 +5,7 @@ import by.tr.collections.collection.List;
 import by.tr.collections.collection.exception.InvalidIndexException;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.NoSuchElementException;
 
 public class ArrayList<T> implements List<T>, Cloneable, Serializable {
@@ -135,6 +136,10 @@ public class ArrayList<T> implements List<T>, Cloneable, Serializable {
         }
     }
 
+    @Override
+    public String toString() {
+        return "[" + Arrays.toString(array) + "]";
+    }
 
     private void checkIndex(int index) {
         if (index > size || index < 0) {
