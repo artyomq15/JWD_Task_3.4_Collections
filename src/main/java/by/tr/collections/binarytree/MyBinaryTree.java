@@ -1,12 +1,8 @@
 package by.tr.collections.binarytree;
 
-/**
- * Created by Lenovo on 11/29/2017.
- */
+
 public class MyBinaryTree {
     private Node root;
-    private int depthLeft;
-    private int depthRight;
 
     public MyBinaryTree() {
 
@@ -14,7 +10,7 @@ public class MyBinaryTree {
 
     public boolean add(Object elem) {
         if (root != null) {
-            root = add(root, elem);
+            root = add(root, null, elem);
         } else {
             root = new Node();
             root.elem = elem;
@@ -22,54 +18,50 @@ public class MyBinaryTree {
         return true;
     }
 
-    private Node add(Node node, Object elem) {
+    private Node add(Node node, Node parent,  Object elem) {
         if (node == null) {
             node = new Node();
             node.elem = elem;
+            node.parent = parent;
         } else if (goLeft(node)) {
-            node.left = add(node.left, elem);
+            node.left = add(node.left,node, elem);
         } else {
-            node.right = add(node.right, elem);
+            node.right = add(node.right,node, elem);
         }
         return node;
     }
 
 
-    private void countDepthLeft(Node node) {
+    private int countDepth(Node node, int depth) {
         if (node != null) {
-            depthLeft++;
-            countDepthLeft(node.right);
+            depth = countDepth(node.right, depth + 1);
         }
-    }
-
-    private void countDepthRight(Node node) {
-        if (node != null) {
-            depthRight++;
-            countDepthRight(node.right);
-        }
+        return depth;
     }
 
     private boolean goLeft(Node node) {
-        int depthRight = 0;
-        int depthLeft = 0;
-        countDepthLeft(node.left);
-        countDepthRight(node.right);
+        int depthLeft = countDepth(node.left, 0);
+        int depthRight = countDepth(node.right, 0);
         return depthRight == depthLeft;
     }
 
     private class Node {
         private Node left;
         private Node right;
+
+        private Node parent;
+
         private Object elem;
 
         public Node() {
 
         }
 
-        public Node(Node left, Node right, Object elem) {
+        public Node(Node left, Node right, Node parent, Object elem) {
             this.left = left;
             this.right = right;
             this.elem = elem;
+            this.parent = parent;
         }
 
         @Override
@@ -78,6 +70,7 @@ public class MyBinaryTree {
                     "left=" + left +
                     ", right=" + right +
                     ", elem=" + elem +
+                    ", parent=" + (parent!=null?parent.elem.toString():null) +
                     '}';
         }
     }
@@ -86,8 +79,6 @@ public class MyBinaryTree {
     public String toString() {
         return "MyBinaryTree{" +
                 "root=" + root +
-                ", depthLeft=" + depthLeft +
-                ", depthRight=" + depthRight +
                 '}';
     }
 
