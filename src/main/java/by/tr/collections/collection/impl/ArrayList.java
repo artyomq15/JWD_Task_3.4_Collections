@@ -137,8 +137,48 @@ public class ArrayList<T> implements List<T>, Cloneable, Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ArrayList<T> that = (ArrayList<T>) o;
+
+        if (size != that.size) return false;
+        int count = 0;
+        Object elem;
+        Object thatElem;
+
+        for (int i = 0; i < size; ++i) {
+            elem = array[i];
+            thatElem = that.array[i];
+
+            if (elem != null ? elem.equals(thatElem) : thatElem == null) {
+                count++;
+            }
+        }
+        return count == size;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Arrays.hashCode(array);
+        result = 31 * result + size;
+        return result;
+    }
+
+    @Override
     public String toString() {
-        return "[" + Arrays.toString(array) + "]";
+        StringBuilder result = new StringBuilder("[");
+
+        if (size > 0) {
+            for (int i = 0; i < size - 1; ++i) {
+                result.append(array[i]).append(", ");
+            }
+            result.append(array[size - 1]);
+        }
+
+        result.append("]");
+        return result.toString();
     }
 
     private void checkIndex(int index) {

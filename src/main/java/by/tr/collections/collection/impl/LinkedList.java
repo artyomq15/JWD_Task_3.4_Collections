@@ -317,16 +317,50 @@ public class LinkedList<T> implements List<T>, Deque<T> {
     }
 
     @Override
-    public String toString() {
-        StringBuilder list = new StringBuilder();
-        list.append("[");
-        Node<T> e = first.getNext();
-        for (int i = 0; i < size - 1; i++) {
-            list.append(e.getElem()).append(", ");
-            e = e.getNext();
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        LinkedList<T> that = (LinkedList<T>) o;
+
+        if (size != that.size) return false;
+
+        Node<T> node = first.next;
+        Node<T> thatNode = that.first.next;
+        int count = 0;
+
+        for (int i = 0; i < size; ++i) {
+            if (thatNode.elem != null ? thatNode.elem.equals(node.elem) : node.elem == null) {
+                count++;
+            }
         }
-        list.append(e.getElem()).append("]");
-        return list.toString();
+
+        return count == size;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = first != null ? first.hashCode() : 0;
+        result = 31 * result + (last != null ? last.hashCode() : 0);
+        result = 31 * result + size;
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder("[");
+        Node current = first.next;
+
+        if (size > 0) {
+            for (int i = 0; i < size - 1; ++i) {
+                result.append(current.elem).append(", ");
+                current = current.next;
+            }
+            result.append(last.prev.elem);
+        }
+        result.append("]");
+
+        return result.toString();
     }
 
     private void linkFirst(T t) {
