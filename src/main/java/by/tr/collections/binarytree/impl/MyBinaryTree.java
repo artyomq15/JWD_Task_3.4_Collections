@@ -1,75 +1,58 @@
 package by.tr.collections.binarytree.impl;
 
-
 import by.tr.collections.binarytree.Tree;
 
 import java.util.*;
 
-public class MyBinaryTree implements Tree {
-    private Node root;
-    private List<Object> traverse;
+public class MyBinaryTree<T extends Comparable<T>> implements Tree<T> {
+    private Node<T> root;
+    private List<T> traverse;
 
     public MyBinaryTree() {
 
     }
 
     @Override
-    public boolean add(Object elem) {
+    public boolean add(T elem) {
         if (root != null) {
-            root = add(root, null, elem);
+            root = add(root, elem);
         } else {
-            root = new Node();
+            root = new Node<>();
             root.elem = elem;
         }
         return true;
     }
 
-    private Node add(Node node, Node parent, Object elem) {
+    private Node<T> add(Node<T> node, T elem) {
         if (node == null) {
-            node = new Node();
+            node = new Node<T>();
             node.elem = elem;
-            node.parent = parent;
-        } else if (goLeft(node)) {
-            node.left = add(node.left, node, elem);
+        } else if (elem.compareTo(node.elem) < 0) {
+            node.left = add(node.left, elem);
         } else {
-            node.right = add(node.right, node, elem);
+            node.right = add(node.right, elem);
         }
         return node;
     }
 
-
-    private int countDepth(Node node, int depth) {
-        if (node != null) {
-            depth = countDepth(node.right, depth + 1);
-        }
-        return depth;
-    }
-
-    private boolean goLeft(Node node) {
-        int depthLeft = countDepth(node.left, 0);
-        int depthRight = countDepth(node.right, 0);
-        return depthRight == depthLeft;
-    }
-    
-
-    private Node findLastNode(Node last, Node node) {
-        if (node == null) {
-            System.out.println("kek");
-            return last;
-        } else if (goLeft(node)) {
-            System.out.println("kkkk");
-            last = findLastNode(node, node.left);
-        } else {
-            System.out.println("LLLL");
-            last = findLastNode(node, node.right);
-        }
-        return last;
-    }
-
     @Override
-    public boolean contains(Object elem) {
+    public boolean contains(T elem) {
         return contains(root, elem);
     }
+
+    private boolean contains(Node<T> n, T elem) {
+        if (n != null) {
+            if (elem.equals(n.elem)) {
+                return true;
+            } else if (elem.compareTo(n.elem) < 0) {
+                return contains(n.left, elem);
+            } else {
+                return contains(n.right, elem);
+            }
+        }
+        return false;
+    }
+
 
     @Override
     public int size() {
@@ -81,34 +64,48 @@ public class MyBinaryTree implements Tree {
         return size() == 0;
     }
 
-    private boolean contains(Node n, Object elem) {
-        boolean res;
-        if (n != null) {
-            if (elem.equals(n.elem)) {
-                return true;
-            }
-            res = contains(n.left, elem);
-            if (res) {
-                return true;
-            }
-            res = contains(n.right, elem);
-            if (res) {
-                return true;
-            }
+    @Override
+    public boolean remove(T elem) {
+        if (!contains(elem)) {
             return false;
         }
-        return false;
+        root = remove(root, elem);
+        return true;
     }
 
+    private Node<T> remove(Node<T> node, T elem) {
+        if (elem.compareTo(node.elem) < 0) {
+            node.left = remove(node.left, elem);
+        } else if (elem.compareTo(node.elem) > 0) {
+            node.right = remove(node.right, elem);
+        } else if (node.left != null && node.right != null) {
+            node.elem = findSuccessor(node.right).elem;
+            node.right = remove(node.right, node.elem);
+        } else {
+            if (node.left != null) {
+                node = node.left;
+            } else {
+                node = node.right;
+            }
+        }
+        return node;
+    }
+
+    private Node<T> findSuccessor(Node<T> node) {
+        if (node.left != null) {
+            node = findSuccessor(node.left);
+        }
+        return node;
+    }
 
     @Override
-    public List<Object> inOrder() {
+    public List<T> inOrder() {
         traverse = new ArrayList<>();
         inOrder(root);
         return traverse;
     }
 
-    private void inOrder(Node n) {
+    private void inOrder(Node<T> n) {
         if (n != null) {
             inOrder(n.left);
             traverse.add(n.elem);
@@ -117,13 +114,13 @@ public class MyBinaryTree implements Tree {
     }
 
     @Override
-    public List<Object> preOrder() {
+    public List<T> preOrder() {
         traverse = new ArrayList<>();
         preOrder(root);
         return traverse;
     }
 
-    private void preOrder(Node n) {
+    private void preOrder(Node<T> n) {
         if (n != null) {
             traverse.add(n.elem);
             preOrder(n.left);
@@ -132,13 +129,13 @@ public class MyBinaryTree implements Tree {
     }
 
     @Override
-    public List<Object> postOrder() {
+    public List<T> postOrder() {
         traverse = new ArrayList<>();
         postOrder(root);
         return traverse;
     }
 
-    private void postOrder(Node n) {
+    private void postOrder(Node<T> n) {
         if (n != null) {
             postOrder(n.left);
             postOrder(n.right);
@@ -146,23 +143,20 @@ public class MyBinaryTree implements Tree {
         }
     }
 
-    private class Node {
-        private Node left;
-        private Node right;
+    private class Node<E extends Comparable<E>> {
+        private Node<E> left;
+        private Node<E> right;
 
-        private Node parent;
-
-        private Object elem;
+        private E elem;
 
         public Node() {
 
         }
 
-        public Node(Node left, Node right, Node parent, Object elem) {
+        public Node(Node<E> left, Node<E> right, E elem) {
             this.left = left;
             this.right = right;
             this.elem = elem;
-            this.parent = parent;
         }
 
         @Override
@@ -171,7 +165,6 @@ public class MyBinaryTree implements Tree {
                     "left=" + left +
                     ", right=" + right +
                     ", elem=" + elem +
-                    ", parent=" + (parent != null ? parent.elem.toString() : null) +
                     '}';
         }
     }
@@ -183,19 +176,4 @@ public class MyBinaryTree implements Tree {
                 '}';
     }
 
-    public static void main(String[] args) {
-        MyBinaryTree binaryTree = new MyBinaryTree();
-
-        for (int i = 1; i <= 10; ++i) {
-            binaryTree.add(i);
-        }
-
-        binaryTree.contains(4);
-        System.out.println(binaryTree.inOrder());
-        System.out.println(binaryTree.preOrder());
-        System.out.println(binaryTree.postOrder());
-        System.out.println(binaryTree);
-
-
-    }
 }

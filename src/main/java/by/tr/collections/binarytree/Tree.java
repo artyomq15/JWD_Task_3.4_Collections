@@ -1,20 +1,21 @@
 package by.tr.collections.binarytree;
 
-
 import java.util.List;
 
-public interface Tree {
-    boolean add(Object elem);
+public interface Tree<T extends Comparable<T>> {
+    boolean add(T elem);
 
-    boolean contains(Object elem);
+    boolean contains(T elem);
 
     int size();
 
     boolean isEmpty();
 
-    List<Object> preOrder();
+    boolean remove(T elem);
 
-    List<Object> inOrder();
+    List<T> preOrder();
 
-    List<Object> postOrder();
+    List<T> inOrder();
+
+    List<T> postOrder();
 }

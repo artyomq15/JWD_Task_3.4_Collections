@@ -119,7 +119,7 @@ public class ArrayList<T> implements List<T>, Cloneable, Serializable {
         @Override
         public T previous() {
             if (this.hasPrevious()) {
-                lastReturnedIndex = index-1;
+                lastReturnedIndex = index - 1;
                 return (T) array[--index];
             }
             throw new NoSuchElementException();
@@ -127,7 +127,7 @@ public class ArrayList<T> implements List<T>, Cloneable, Serializable {
 
         @Override
         public void remove() {
-            System.out.println(lastReturnedIndex + "_" );
+            System.out.println(lastReturnedIndex + "_");
 
             int numberElements = size - lastReturnedIndex - 1;
             System.arraycopy(array, lastReturnedIndex + 1, array, lastReturnedIndex, numberElements);

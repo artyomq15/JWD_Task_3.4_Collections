@@ -204,7 +204,7 @@ public class LinkedList<T> implements List<T>, Deque<T> {
 
         @Override
         public boolean hasPrevious() {
-            return index>0;
+            return index > 0;
         }
 
         @Override
@@ -230,8 +230,8 @@ public class LinkedList<T> implements List<T>, Deque<T> {
     @Override
     public void add(int index, T t) {
         checkIndex(index);
-        if (index==0){
-            Node<T> tNode = new Node<>(t,first,first.getNext());
+        if (index == 0) {
+            Node<T> tNode = new Node<>(t, first, first.getNext());
             first.getNext().setPrev(tNode);
             first.setNext(tNode);
             size++;
@@ -239,8 +239,8 @@ public class LinkedList<T> implements List<T>, Deque<T> {
         }
         Node<T> n = first.getNext();
         for (int i = 0; i <= size; i++) {
-            if (i==index){
-                Node<T> tNode = new Node<>(t,n.getPrev(),n);
+            if (i == index) {
+                Node<T> tNode = new Node<>(t, n.getPrev(), n);
                 n.getPrev().setNext(tNode);
                 n.setPrev(tNode);
                 size++;
@@ -255,8 +255,8 @@ public class LinkedList<T> implements List<T>, Deque<T> {
         checkIndex(index);
         Node<T> n = first.getNext();
         for (int i = 0; i <= size; i++) {
-            if (i==index){
-               return n.getElem();
+            if (i == index) {
+                return n.getElem();
             }
             n = n.getNext();
         }
@@ -268,7 +268,7 @@ public class LinkedList<T> implements List<T>, Deque<T> {
         checkIndex(index);
         Node<T> n = first.getNext();
         for (int i = 0; i < size; i++) {
-            if (i==index){
+            if (i == index) {
                 return unlink(n);
             }
             n = n.getNext();

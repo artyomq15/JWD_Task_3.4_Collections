@@ -1,6 +1,6 @@
 package by.tr.collections.collection.exception;
 
-public class InvalidIndexException extends RuntimeException{
+public class InvalidIndexException extends RuntimeException {
     public InvalidIndexException() {
     }
 
